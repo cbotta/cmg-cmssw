@@ -2,7 +2,8 @@ import random
 from CMGTools.RootTools.fwlite.Analyzer import Analyzer
 from CMGTools.RootTools.fwlite.AutoHandle import AutoHandle
 from CMGTools.RootTools.physicsobjects.PhysicsObjects import Jet
-from CMGTools.RootTools.utils.DeltaR import deltaR2, matchObjectCollection
+from CMGTools.RootTools.utils.DeltaR import * 
+#from CMGTools.RootTools.utils.DeltaR import deltaR2, matchObjectCollection
 from CMGTools.RootTools.statistics.Counter import Counter, Counters
 from CMGTools.RootTools.physicsobjects.JetReCalibrator import JetReCalibrator
 
@@ -68,9 +69,11 @@ class ttHJetAnalyzer( Analyzer ):
 
         ## Apply jet selection
         event.jets = []
+        event.jetsNoId = []
         event.jetsFailId = []
         for jet in allJets:
-            if self.testJetNoID( jet ): 
+            if self.testJetNoID( jet ):
+                event.jetsNoId.append(jet)
                 if self.testJetID (jet ):
                     event.jets.append(jet)
                 else:
@@ -87,6 +90,14 @@ class ttHJetAnalyzer( Analyzer ):
         event.cleanJetsAll = cleanNearestJetOnly(event.jets, leptons, 0.5)
         event.cleanJets    = [j for j in event.cleanJetsAll if abs(j.eta()) <  self.cfg_ana.jetEtaCentral ]
         event.cleanJetsFwd = [j for j in event.cleanJetsAll if abs(j.eta()) >= self.cfg_ana.jetEtaCentral ]
+
+        ## Clean raw Jets from loose FR leptons, for FR studies
+        leptonsFR = event.looseFRLeptons
+        event.cleanFRNoIdJetsAll = cleanNearestJetOnly(event.jetsNoId, leptonsFR, 1)
+        #event.cleanFRNoIdJetsAll = [j for j in event.jetsNoId if min(deltaR(j.eta(),j.phi(),l.eta(),l.phi()) for l in event.looseFRLeptons) > 1. ]
+        #print len(event.cleanFRNoIdJetsAll)
+        event.cleanFRNoIdJets    = [j for j in event.cleanFRNoIdJetsAll if abs(j.eta()) <  self.cfg_ana.jetEtaCentral ]
+        event.cleanFRNoIdJetsFwd = [j for j in event.cleanFRNoIdJetsAll if abs(j.eta()) >= self.cfg_ana.jetEtaCentral ]
 
         ## Associate jets to leptons
         leptons = event.inclusiveLeptons if hasattr(event, 'inclusiveLeptons') else event.selectedLeptons
@@ -112,7 +123,7 @@ class ttHJetAnalyzer( Analyzer ):
         
     def testJetNoID( self, jet ):
         # 2 is loose pile-up jet id
-        return jet.pt() > self.cfg_ana.jetPt and \
+        return (jet.pt() * jet.rawFactor()) > self.cfg_ana.jetPt and \
                abs( jet.eta() ) < self.cfg_ana.jetEta;
  
 

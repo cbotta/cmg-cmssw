@@ -102,10 +102,17 @@ class ttHLepAnalyzerBase( Analyzer ):
         event.looseLeptons = []
         event.selectedLeptons = []
         event.inclusiveLeptons = []
+        #for fakerate studies
+        event.synchLeptons = []
+        event.looseFRLeptons = []
+        event.tightFRLeptons = []
+
+
+        
 
         #muons
         allmuons = map( Muon, self.handles['muons'].product() )
-
+        
         if self.cfg_ana.doRecomputeSIP3D:
             for mu in allmuons:
                 if mu.sourcePtr().innerTrack().isNonnull():
@@ -131,6 +138,21 @@ class ttHLepAnalyzerBase( Analyzer ):
 
         for mu in allmuons:
             mu.associatedVertex = event.goodVertices[0]
+            #relIso03 = (mu.chargedHadronIso(0.3) + max(((mu.neutralHadronIso(0.3)+mu.photonIso(0.3))-0.5*(mu.puChargedHadronIso(0.3))),0))/mu.pt()
+            relIso03= (mu.sourcePtr().pfIsolationR03().sumChargedHadronPt + max( mu.sourcePtr().pfIsolationR03().sumNeutralHadronEt +  mu.sourcePtr().pfIsolationR03().sumPhotonEt -  mu.sourcePtr().pfIsolationR03().sumPUPt/2,0.0))/mu.pt()
+            
+            mu._looseFakeId = ((mu.isGlobal() or mu.isTracker() and mu.numberOfMatches()>0) and mu.sourcePtr().userFloat("isPFMuon")>0.5 and mu.pt()>10 and abs(mu.eta())<2.4 and mu.tightId()>0.5 and abs(mu.dxy())<0.2 and abs(mu.dz())<0.2 and relIso03<1.0)
+            mu.looseFakeId  = types.MethodType(lambda self : self._looseFakeId, mu, mu.__class__)
+            if (mu.looseFakeId()):
+                event.looseFRLeptons.append(mu)
+            
+            mu._tightFakeId = ((mu.isGlobal() or mu.isTracker() and mu.numberOfMatches()>0) and mu.sourcePtr().userFloat("isPFMuon")>0.5 and mu.pt()>10 and abs(mu.eta())<2.4 and mu.tightId()>0.5 and abs(mu.dxy())<0.01 and abs(mu.dz())<0.2 and relIso03<0.1)
+            mu.tightFakeId  = types.MethodType(lambda self : self._tightFakeId, mu, mu.__class__)
+            if (mu.tightFakeId()):
+                event.tightFRLeptons.append(mu)
+
+            if mu.pt()>10 and abs(mu.eta())<2.4:
+                event.synchLeptons.append(mu)                        
             if (mu.isGlobal() or mu.isTracker() and mu.numberOfMatches()>0) and mu.pt()>5 and abs(mu.eta())<2.4 and abs(mu.dxy())<0.5 and abs(mu.dz())<1.:
                 #pid = mu.sourcePtr().originalObject().track().id()
                 #key = mu.sourcePtr().originalObject().track().key()
@@ -141,6 +163,7 @@ class ttHLepAnalyzerBase( Analyzer ):
                     event.looseLeptons.append(mu)
                 if mu.sourcePtr().userFloat("isPFMuon")>0.5 and mu.sip3D() < self.cfg_ana.sip3dCutVeryLoose:
                     event.inclusiveLeptons.append(mu)
+                    
 
         #electrons        
         allelectrons = map( Electron, self.handles['electrons'].product() )
@@ -216,6 +239,10 @@ class ttHLepAnalyzerBase( Analyzer ):
         event.looseLeptons.sort(key = lambda l : l.pt(), reverse = True)
         event.selectedLeptons.sort(key = lambda l : l.pt(), reverse = True)
         event.inclusiveLeptons.sort(key = lambda l : l.pt(), reverse = True)
+        event.synchLeptons.sort(key = lambda l : l.pt(), reverse = True)
+        event.looseFRLeptons.sort(key = lambda l : l.pt(), reverse = True)
+        event.tightFRLeptons.sort(key = lambda l : l.pt(), reverse = True)
+
 
         for lepton in event.selectedLeptons:
             if hasattr(self,'efficiency'):
@@ -251,9 +278,17 @@ class ttHLepAnalyzerBase( Analyzer ):
         if hasattr(self.cfg_ana, 'minInclusiveLeptons') and len(event.inclusiveLeptons) < self.cfg_ana.minInclusiveLeptons:
             if ret: self.counters.counter('events').inc('vetoed events')
             ret = False
+        if hasattr(self.cfg_ana, 'nlooseFRLeptons') and len(event.looseFRLeptons) != self.cfg_ana.nlooseFRLeptons:
+            if ret: self.counters.counter('events').inc('vetoed events')
+            ret = False
+        if hasattr(self.cfg_ana, 'ntightFRLeptons') and len(event.tightFRLeptons) != self.cfg_ana.ntightFRLeptons:
+            if ret: self.counters.counter('events').inc('vetoed events')
+            ret = False 
         if hasattr(self.cfg_ana, 'maxGoodLeptons') and len(event.selectedLeptons) > self.cfg_ana.maxGoodLeptons:
             if ret: self.counters.counter('events').inc('vetoed events')
             ret = False
+            
+            
         #if self.cfg_ana.doSSLeptons and len(event.selectedLeptons) >= 2:
         #    if event.selectedLeptons[0].charge() == event.selectedLeptons[1].charge():
         #        ret = True
