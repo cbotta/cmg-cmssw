@@ -212,7 +212,7 @@ sequence = cfg.Sequence([
 # selectedComponents.remove(WJets)
 # #selectedComponents.remove(TTJets)
 
-test = 5
+test = 6
 if test==1:
     # test a single component, using a single thread.
     # necessary to debug the code, until it doesn't crash anymore
@@ -246,8 +246,23 @@ elif test==5:
     comp = selectedComponents[0]
     comp.files = ['root://cmsphys05//data/b/botta/TTHAnalysis/FakesStudy/cmgTuple_1.root','root://cmsphys05//data/b/botta/TTHAnalysis/FakesStudy/cmgTuple_2.root']
     selectedComponents = [comp]
-    comp.splitFactor = 1
+    comp.splitFactor = 2
     comp.triggers = [] 
+elif test==6:
+    # MC sync sample
+    comp = selectedComponents[0]
+    comp.files = [
+        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file1.root',
+        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file2.root',
+        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file3.root',
+        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file4.root',
+        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file5.root',
+    ]
+    #comp.files = comp.files[:2]
+    comp.splitFactor = len(comp.files)
+    selectedComponents = [comp]
+    comp.triggers = [] 
+ 
  
 
 

@@ -93,8 +93,8 @@ class ttHJetAnalyzer( Analyzer ):
 
         ## Clean raw Jets from loose FR leptons, for FR studies
         leptonsFR = event.looseFRLeptons
-        event.cleanFRNoIdJetsAll = cleanNearestJetOnly(event.jetsNoId, leptonsFR, 1)
-        #event.cleanFRNoIdJetsAll = [j for j in event.jetsNoId if min(deltaR(j.eta(),j.phi(),l.eta(),l.phi()) for l in event.looseFRLeptons) > 1. ]
+        #event.cleanFRNoIdJetsAll = cleanNearestJetOnly(event.jetsNoId, leptonsFR, 1)
+        event.cleanFRNoIdJetsAll = [j for j in event.jetsNoId if min(deltaR(j.eta(),j.phi(),l.eta(),l.phi()) for l in event.looseFRLeptons) > 1. ]
         #print len(event.cleanFRNoIdJetsAll)
         event.cleanFRNoIdJets    = [j for j in event.cleanFRNoIdJetsAll if abs(j.eta()) <  self.cfg_ana.jetEtaCentral ]
         event.cleanFRNoIdJetsFwd = [j for j in event.cleanFRNoIdJetsAll if abs(j.eta()) >= self.cfg_ana.jetEtaCentral ]
