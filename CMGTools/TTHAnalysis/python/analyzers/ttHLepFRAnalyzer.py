@@ -42,8 +42,8 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
 
     def declareHandles(self):
         super(ttHLepFRAnalyzer, self).declareHandles()
-        #self.handles['met'] = AutoHandle( 'cmgPFMET', 'std::vector<cmg::BaseMET>' )
-        self.handles['met'] = AutoHandle( 'cmgPFMETRaw', 'std::vector<cmg::BaseMET>' )
+        self.handles['met'] = AutoHandle( 'cmgPFMET', 'std::vector<cmg::BaseMET>' )
+        #self.handles['met'] = AutoHandle( 'cmgPFMETRaw', 'std::vector<cmg::BaseMET>' )
         self.handles['nopumet'] = AutoHandle( 'nopuMet', 'std::vector<reco::PFMET>' )
         self.handles['TriggerResults'] = AutoHandle( ('TriggerResults','','HLT'), 'edm::TriggerResults' )
 
@@ -89,7 +89,12 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
     def process(self, iEvent, event):
         self.readCollections( iEvent )
         event.met = self.handles['met'].product()[0]
-        event.cleanFRNoIdJetsAll.sort(key = lambda l : (l.pt()* l.rawFactor()), reverse = True)
+        if hasattr(event, 'deltaMetFromJEC'):
+            import ROOT
+            px,py = event.met.px()+event.deltaMetFromJEC[0], event.met.py()+event.deltaMetFromJEC[1]
+            event.met.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, hypot(px,py)))
+
+        event.cleanFRNoIdJetsAll.sort(key = lambda l : (l.pt()), reverse = True)
 
         self.tree.reset() 
         tr = self.tree

@@ -26,8 +26,8 @@ class ttHJetAnalyzer( Analyzer ):
     def __init__(self, cfg_ana, cfg_comp, looperName):
         super(ttHJetAnalyzer,self).__init__(cfg_ana, cfg_comp, looperName)
         if self.cfg_comp.isMC:
-            self.jetReCalibrator    = JetReCalibrator("START53_V27","AK5PF",    False)
-            self.jetReCalibratorCHS = JetReCalibrator("START53_V27","AK5PFchs", False)
+            self.jetReCalibrator    = JetReCalibrator("START53_V20","AK5PF",    False)
+            self.jetReCalibratorCHS = JetReCalibrator("START53_V20","AK5PFchs", False)
         else:
             self.jetReCalibrator    = JetReCalibrator("FT_53_V21_AN5","AK5PF",    True)
             self.jetReCalibratorCHS = JetReCalibrator("FT_53_V21_AN5","AK5PFchs", True)
@@ -54,6 +54,7 @@ class ttHJetAnalyzer( Analyzer ):
             rho  = float(self.handles['rho'].product()[0])
             corr = self.jetReCalibratorCHS if 'CHS' in self.cfg_ana.jetCol else self.jetReCalibrator
             corr.correctAll(allJets, rho, delta=self.shiftJEC, metShift=event.deltaMetFromJEC)
+            #print event.deltaMetFromJEC
        
         ## If using a different collection for MVA, set it up 
         allJets4MVA = []
@@ -123,7 +124,7 @@ class ttHJetAnalyzer( Analyzer ):
         
     def testJetNoID( self, jet ):
         # 2 is loose pile-up jet id
-        return (jet.pt() * jet.rawFactor()) > self.cfg_ana.jetPt and \
+        return jet.pt() > self.cfg_ana.jetPt and \
                abs( jet.eta() ) < self.cfg_ana.jetEta;
  
 

@@ -139,7 +139,7 @@ ttHJetAna = cfg.Analyzer(
 # Jet MC Match Analyzer
 ttHJetMCAna = cfg.Analyzer(
     'ttHJetMCMatchAnalyzer',
-    smearJets = True,
+    smearJets = False,
     shiftJER = 0, # set to +1 or -1 to get +/-1 sigma shifts
     )
 
@@ -258,7 +258,7 @@ elif test==6:
         'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file4.root',
         'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file5.root',
     ]
-    #comp.files = comp.files[:2]
+    #comp.files = comp.files[:1]
     comp.splitFactor = len(comp.files)
     selectedComponents = [comp]
     comp.triggers = [] 

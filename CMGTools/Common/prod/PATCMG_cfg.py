@@ -20,11 +20,12 @@ from CMGTools.Production.datasetToSource import *
 ## This is used to get the correct global tag below, and to find the files
 ## It is *reset* automatically by ProductionTasks, so you can use it after the ProductionTasksHook
 datasetInfo = (
-    'cmgtools_group',
-    '/VBF_HToTauTau_M-125_8TeV-powheg-pythia6/Summer12_DR53X-PU_S10_START53_V7A-v1/AODSIM/V5_B',
+    #'cmgtools_group',
+    #'/VBF_HToTauTau_M-125_8TeV-powheg-pythia6/Summer12_DR53X-PU_S10_START53_V7A-v1/AODSIM/V5_B',
     #FASTSIM'/SMS-T2tt_mStop-675to800_mLSP-0to275_8TeV-Pythia6Z/Summer12-START52_V9_FSIM-v1/AODSIM/V5_B/',
-    # 'CMS',
+     'CMS',
     # '/DoubleMu/Run2012A-22Jan2013-v1/AOD',
+     '/DoubleMu/Run2012D-PromptReco-v1/AOD',
     '.*root')
 process.source = datasetToSource(
     *datasetInfo
@@ -195,7 +196,7 @@ process.outcmg = cms.OutputModule(
 
 process.outpath += process.outcmg
 # you can uncomment this below to test the 16-bit-packed cmgCandidates
-# process.outcmg.outputCommands.append('keep cmgPackedCandidates_cmgCandidates_*_*') 
+process.outcmg.outputCommands.append('keep cmgPackedCandidates_cmgCandidates_*_*') 
 # process.outcmg.outputCommands.append('drop cmgCandidates_cmgCandidates_*_*') 
 
 
@@ -249,11 +250,14 @@ process.p.visit(v)
 
 ### Set the global tag from the dataset name
 from CMGTools.Common.Tools.getGlobalTag import getGlobalTagByDataset
-process.GlobalTag.globaltag = getGlobalTagByDataset( runOnMC, datasetInfo[1])
+process.GlobalTag.globaltag = "START53_V20::All" if runOnMC else "GR_P_V42_AN4::All" #getGlobalTagByDataset( runOnMC, datasetInfo[1])
 print 'Global tag       : ', process.GlobalTag.globaltag
 ###
 
 print sep_line
 
 print 'starting CMSSW'
+process.source.fileNames = [ '/store/caf/user/fgolf/fake_leptons/qcd_mu_file1.root' ]
+#process.source.fileNames = [ 'file:/afs/cern.ch/user/m/mdunser/public/doubleMu_goodfileRunD.root' ]
+process.maxEvents.input = 100
 
