@@ -22,7 +22,6 @@ def cleanNearestJetOnly(jets,leptons,deltaR):
 
 class ttHJetAnalyzer( Analyzer ):
     """Taken from RootTools.JetAnalyzer, simplified, modified, added corrections    """
-
     def __init__(self, cfg_ana, cfg_comp, looperName):
         super(ttHJetAnalyzer,self).__init__(cfg_ana, cfg_comp, looperName)
         if self.cfg_comp.isMC:
@@ -55,6 +54,7 @@ class ttHJetAnalyzer( Analyzer ):
             corr = self.jetReCalibratorCHS if 'CHS' in self.cfg_ana.jetCol else self.jetReCalibrator
             corr.correctAll(allJets, rho, delta=self.shiftJEC, metShift=event.deltaMetFromJEC)
             #print event.deltaMetFromJEC
+        event.allJetsUsedForMET = allJets
        
         ## If using a different collection for MVA, set it up 
         allJets4MVA = []

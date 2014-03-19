@@ -20,6 +20,7 @@ from CMGTools.RootTools.utils.DeltaR import *
 from CMGTools.TTHAnalysis.leptonMVA import LeptonMVA
 
 from CMGTools.RootTools.analyzers.TreeAnalyzerNumpy import TreeAnalyzerNumpy
+from CMGTools.RootTools.physicsobjects.JetReCalibrator import JetReCalibrator, Type1METCorrection
 from CMGTools.TTHAnalysis.analyzers.ntuple import *
 import os
 
@@ -39,13 +40,16 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
             trigVec = ROOT.vector(ROOT.string)()
             trigVec.push_back("HLT_%s_v*" % T)
             self.triggerCheckers.append( (T.replace("_eta2p1",""), TriggerBitChecker(trigVec)) )
+        self.type1MET = Type1METCorrection("START53_V20","AK5PF", False)
 
     def declareHandles(self):
         super(ttHLepFRAnalyzer, self).declareHandles()
         self.handles['met'] = AutoHandle( 'cmgPFMET', 'std::vector<cmg::BaseMET>' )
-        #self.handles['met'] = AutoHandle( 'cmgPFMETRaw', 'std::vector<cmg::BaseMET>' )
+        self.handles['metRaw'] = AutoHandle( 'cmgPFMETRaw', 'std::vector<cmg::BaseMET>' )
+        self.handles['muons'] = AutoHandle('cmgMuonSel',"std::vector<cmg::Muon>")            
         self.handles['nopumet'] = AutoHandle( 'nopuMet', 'std::vector<reco::PFMET>' )
         self.handles['TriggerResults'] = AutoHandle( ('TriggerResults','','HLT'), 'edm::TriggerResults' )
+        self.handles['rho'] = AutoHandle( ('kt6PFJets','rho',''), 'double' )
 
     def declareVariables(self):
         tr = self.tree
@@ -75,9 +79,17 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
         var(tr, 'dphi_tp')
         var(tr, 'dr_tp')
         var(tr, 'mtw_probe')
-        var(tr, 'mtw2_probe')
         var(tr, 'met')
         var(tr, 'metPhi')
+        var(tr, 'mtw_probe_raw')
+        var(tr, 'met_raw')
+        var(tr, 'metPhi_raw')
+        var(tr, 'mtw_probe_old')
+        var(tr, 'met_old')
+        var(tr, 'metPhi_old')
+        var(tr, 'mtw_probe_t1')
+        var(tr, 'met_t1')
+        var(tr, 'metPhi_t1')
 
     def beginLoop(self):
         super(ttHLepFRAnalyzer,self).beginLoop()
@@ -89,10 +101,20 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
     def process(self, iEvent, event):
         self.readCollections( iEvent )
         event.met = self.handles['met'].product()[0]
+        event.metRaw = self.handles['metRaw'].product()[0]
+        event.metOld = event.met.__class__(event.met)
+        event.metT1  = event.met.__class__(event.metRaw)
         if hasattr(event, 'deltaMetFromJEC'):
             import ROOT
             px,py = event.met.px()+event.deltaMetFromJEC[0], event.met.py()+event.deltaMetFromJEC[1]
-            event.met.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, hypot(px,py)))
+            px0, py0 = event.metRaw.px(), event.metRaw.py()
+            dpx0, dpy0 = self.type1MET.getMETCorrection( event.allJetsUsedForMET, float(self.handles['rho'].product()[0]),  self.handles['muons'].product())
+            px0 += dpx0; py0 += dpy0
+            #print "run ",event.run," lumi ", event.lumi," event ", event.eventId, ": MET correction: correct %+7.3f %+7.3f    by hand %+7.3f %+7.3f    diff %+7.3f %+7.3f (phi %+5.3f) " % (event.met.px()-event.metRaw.px(), event.met.py()-event.metRaw.py(), px0-event.metRaw.px(), py0-event.metRaw.py(), event.met.px()-px0,event.met.py()-py0, atan2(event.met.py()-py0, event.met.px()-px0))
+            #print "run ",event.run," lumi ", event.lumi," event ", event.eventId, ": old value: ",event.met.pt()," new value: ",hypot(px,py),"  raw met: ",event.metRaw.pt()," type 1 by hand: ",hypot(px0,py0)
+            event.met.setP4(  ROOT.reco.Particle.LorentzVector(px,py, 0, hypot(px,py)))
+            event.metT1.setP4(ROOT.reco.Particle.LorentzVector(px0,py0, 0, hypot(px0,py0)))
+            
 
         event.cleanFRNoIdJetsAll.sort(key = lambda l : (l.pt()), reverse = True)
 
@@ -106,9 +128,16 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
         fill(tr, 'nLepFRLoose', len(event.looseFRLeptons))
 
         fill( tr, 'nJet',        len(event.cleanFRNoIdJetsAll) )
-        fill(tr, 'met', event.met.pt())
 
+        fill(tr, 'met', event.met.pt())
         fill(tr, 'metPhi', event.met.phi())
+        fill(tr, 'met_raw', event.metRaw.pt())
+        fill(tr, 'metPhi_raw', event.metRaw.phi())
+        fill(tr, 'met_t1', event.metT1.pt())
+        fill(tr, 'metPhi_t1', event.metT1.phi())
+        fill(tr, 'met_old', event.metOld.pt())
+        fill(tr, 'metPhi_old', event.metOld.phi())
+
 
         self.counters.counter('pairs').inc('all events')
 
@@ -131,7 +160,10 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
              if abs(lep.pdgId()) == 11: continue
              fillLepton(tr, "Probe", lep)
              fill(tr, 'mtw_probe',  mtw(lep, event.met))
-             fill(tr, 'mtw2_probe', mtw2(lep, event.met))
+             fill(tr, 'mtw_probe_raw',  mtw(lep, event.metRaw))
+             fill(tr, 'mtw_probe_old',  mtw(lep, event.metOld))
+             fill(tr, 'mtw_probe_t1',  mtw(lep, event.metT1))
+             #fill(tr, 'mtw2_probe', mtw2(lep, event.met))
              for jet in event.cleanFRNoIdJetsAll:
                  fillJet(tr,"Jet",jet)
                  dphi = deltaPhi(jet.phi(),lep.phi())

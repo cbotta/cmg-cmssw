@@ -212,7 +212,7 @@ sequence = cfg.Sequence([
 # selectedComponents.remove(WJets)
 # #selectedComponents.remove(TTJets)
 
-test = 6
+test = 7
 if test==1:
     # test a single component, using a single thread.
     # necessary to debug the code, until it doesn't crash anymore
@@ -244,10 +244,11 @@ elif test==4:
 elif test==5:
     # MC sync sample
     comp = selectedComponents[0]
-    comp.files = ['root://cmsphys05//data/b/botta/TTHAnalysis/FakesStudy/cmgTuple_1.root','root://cmsphys05//data/b/botta/TTHAnalysis/FakesStudy/cmgTuple_2.root']
+    comp.files = ['file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/v1/cmgTuple_V5_10_qcd_mu_file1.full.root']
     selectedComponents = [comp]
-    comp.splitFactor = 2
+    comp.splitFactor = 1
     comp.triggers = [] 
+    ttHJetAna.recalibrateJets = True
 elif test==6:
     # MC sync sample
     comp = selectedComponents[0]
@@ -258,10 +259,34 @@ elif test==6:
         'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file4.root',
         'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file5.root',
     ]
-    #comp.files = comp.files[:1]
+    comp.files = comp.files[:1]
     comp.splitFactor = len(comp.files)
     selectedComponents = [comp]
     comp.triggers = [] 
+elif test==7:
+    # Data sync sample
+    comp = DoubleMuD
+    comp.files = [
+        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_doubleMu_goodfileRunD.root',
+    ]
+    comp.splitFactor = len(comp.files)
+    selectedComponents = [comp]
+    comp.triggers = [] 
+    comp.json = '/afs/cern.ch/user/g/gpetrucc/scratch0/cmgprod/CMSSW_5_3_14/src/CMGTools/TTHAnalysis/data/json/sync-Run2012D-Prompt.json'
+elif test==8:
+    # Data sync sample, processed with V5_10
+    comp = DoubleMuD
+    comp.files = [
+        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_V5_10_doubleMu_goodfileRunD.root',
+    ]
+    comp.splitFactor = len(comp.files)
+    selectedComponents = [comp]
+    comp.triggers = [] 
+    ttHJetAna.recalibrateJets = True
+    comp.json = '/afs/cern.ch/user/g/gpetrucc/scratch0/cmgprod/CMSSW_5_3_14/src/CMGTools/TTHAnalysis/data/json/sync-Run2012D-Prompt.json'
+
+
+
  
  
 
