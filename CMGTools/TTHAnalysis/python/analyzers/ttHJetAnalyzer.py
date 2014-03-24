@@ -28,8 +28,8 @@ class ttHJetAnalyzer( Analyzer ):
             self.jetReCalibrator    = JetReCalibrator("START53_V20","AK5PF",    False)
             self.jetReCalibratorCHS = JetReCalibrator("START53_V20","AK5PFchs", False)
         else:
-            self.jetReCalibrator    = JetReCalibrator("FT_53_V21_AN5","AK5PF",    True)
-            self.jetReCalibratorCHS = JetReCalibrator("FT_53_V21_AN5","AK5PFchs", True)
+            self.jetReCalibrator    = JetReCalibrator("GR_P_V42_AN4","AK5PF",    True)
+            self.jetReCalibratorCHS = JetReCalibrator("GR_P_V42_AN4","AK5PFchs", True)
         self.doPuId = self.cfg_ana.doPuId if hasattr(self.cfg_ana, 'doPuId') else True
         self.shiftJEC = self.cfg_ana.shiftJEC if hasattr(self.cfg_ana, 'shiftJEC') else 0
         self.doJEC = self.cfg_ana.recalibrateJets or (self.shiftJEC != 0)

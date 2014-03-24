@@ -40,7 +40,10 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
             trigVec = ROOT.vector(ROOT.string)()
             trigVec.push_back("HLT_%s_v*" % T)
             self.triggerCheckers.append( (T.replace("_eta2p1",""), TriggerBitChecker(trigVec)) )
-        self.type1MET = Type1METCorrection("START53_V20","AK5PF", False)
+        if self.cfg_comp.isMC:
+            self.type1MET = Type1METCorrection("START53_V20","AK5PF",  False)
+        else:
+            self.type1MET = Type1METCorrection("GR_P_V42_AN4","AK5PF", True) 
 
     def declareHandles(self):
         super(ttHLepFRAnalyzer, self).declareHandles()
