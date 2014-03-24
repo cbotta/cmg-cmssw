@@ -187,6 +187,8 @@ SingleMuC.splitFactor = 1200
 QCDMuPt15.splitFactor = 500
 
 
+selectedComponents = [ QCDMuPt15, WJets, DYJetsM50 ]
+
 #-------- SEQUENCE
 
 sequence = cfg.Sequence([
@@ -212,7 +214,12 @@ sequence = cfg.Sequence([
 # selectedComponents.remove(WJets)
 # #selectedComponents.remove(TTJets)
 
-test = 7
+test = 0
+selectedComponents = [DoubleMuD]
+for comp in selectedComponents:
+    comp.json = '/afs/cern.ch/user/g/gpetrucc/scratch0/cmgprod/CMSSW_5_3_14/src/CMGTools/TTHAnalysis/data/json/sync-Run2012D-Prompt.json'
+
+ttHJetAna.recalibrateJets = True
 if test==1:
     # test a single component, using a single thread.
     # necessary to debug the code, until it doesn't crash anymore
@@ -224,9 +231,11 @@ elif test==2:
     # test all components (1 thread per component.
     # important to make sure that your code runs on any kind of component
     #selectedComponents = dataSamples1Mu
+    printComps(selectedComponents, True)
     for comp in selectedComponents:
         comp.splitFactor = 1
-        comp.files = comp.files[:3]
+        comp.files = comp.files[:20]
+    ttHJetAna.recalibrateJets = True
 elif test==3:
     # test two components, using many threads, to check if variables are ok
     comp = SingleMuD
@@ -273,6 +282,7 @@ elif test==7:
     selectedComponents = [comp]
     comp.triggers = [] 
     comp.json = '/afs/cern.ch/user/g/gpetrucc/scratch0/cmgprod/CMSSW_5_3_14/src/CMGTools/TTHAnalysis/data/json/sync-Run2012D-Prompt.json'
+    ttHJetAna.recalibrateJets = True
 elif test==8:
     # Data sync sample, processed with V5_10
     comp = DoubleMuD
