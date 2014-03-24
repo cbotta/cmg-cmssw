@@ -125,7 +125,6 @@ def fillLepton( tree, pName, lepton ):
     fill(tree, '{pName}_chargedIso'.format(pName=pName), lepton.chargedHadronIso())
     fill(tree, '{pName}_mvaIso'.format(pName=pName), lepton.mvaIso())
     #fill(tree, '{pName}_relIso03'.format(pName=pName), (lepton.chargedHadronIso(0.3) + max(((lepton.neutralHadronIso(0.3)+lepton.photonIso(0.3))-0.5*(lepton.puChargedHadronIso(0.3))),0))/lepton.pt())
-    #fill(tree, '{pName}_relIso03'.format(pName=pName), (lepton.sourcePtr().pfIsolationR03().sumChargedHadronPt + max( lepton.sourcePtr().pfIsolationR03().sumNeutralHadronEt +  lepton.sourcePtr().pfIsolationR03().sumPhotonEt -  lepton.sourcePtr().pfIsolationR03().sumPUPt/2,0.0))/lepton.pt())
     if hasattr(lepton, 'jet'):
         #fill(tree, '{pName}_ptRelJet'.format(pName=pName), lepton.ptRelJet)
         fill(tree, '{pName}_jetPtRatio'.format(pName=pName), lepton.pt()/lepton.jet.pt())
@@ -165,6 +164,7 @@ def fillLepton( tree, pName, lepton ):
         fill(tree, '{pName}_ehi'.format(pName=pName), lepton.sourcePtr().innerTrack().trackerExpectedHitsInner().numberOfLostHits() if lepton.sourcePtr().innerTrack().isNonnull() else -9999)
         fill(tree, '{pName}_eho'.format(pName=pName), lepton.sourcePtr().innerTrack().trackerExpectedHitsOuter().numberOfLostHits() if lepton.sourcePtr().innerTrack().isNonnull() else -9999)
         fill(tree, '{pName}_ptRelErr'.format(pName=pName), lepton.sourcePtr().innerTrack().ptError()/abs(lepton.sourcePtr().innerTrack().pt()) if lepton.sourcePtr().innerTrack().isNonnull() else -9999)
+        fill(tree, '{pName}_relIso03'.format(pName=pName), (lepton.sourcePtr().pfIsolationR03().sumChargedHadronPt + max( lepton.sourcePtr().pfIsolationR03().sumNeutralHadronEt +  lepton.sourcePtr().pfIsolationR03().sumPhotonEt -  lepton.sourcePtr().pfIsolationR03().sumPUPt/2,0.0))/lepton.pt())
         
         fill(tree, '{pName}_segComp'.format(pName=pName), lepton.sourcePtr().segmentCompatibility() )
         fill(tree, '{pName}_caloComp'.format(pName=pName), lepton.sourcePtr().caloCompatibility() )
