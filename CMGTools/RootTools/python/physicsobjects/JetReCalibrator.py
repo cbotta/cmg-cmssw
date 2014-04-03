@@ -97,17 +97,11 @@ class Type1METCorrection:
             if j.component(4).fraction() > 0.9: continue
             jp4 = j.p4().__class__(j.p4());
             jp4 *= j.rawFactor()
-            if j.component(3).fraction() != 0:
-                mup4 = j.p4().__class__(0,0,0,0)
-                for mu in muons:
-                    if (mu.sourcePtr().isGlobalMuon() or mu.sourcePtr().isStandAloneMuon()) and mu.sourcePtr().isPFMuon() and deltaR(mu.eta(),mu.phi(),j.eta(),j.phi()) < 0.5:
-                        mup4 += mu.p4()
-                fdiff = mup4.E()/(j.energy()*j.rawFactor()) - j.component(3).fraction()
-                if abs(fdiff) > 0.01:
-                    jp4scaled = jp4.__class__(jp4)
-                    jp4scaled *= fdiff
-                    mup4 -= jp4scaled
-                jp4 -= mup4
+            mup4 = j.p4().__class__(0,0,0,0)
+            for mu in muons:
+                if mu.sourcePtr().track().isNonnull() and (mu.sourcePtr().isGlobalMuon() or mu.sourcePtr().isStandAloneMuon()) and deltaR(mu.eta(),mu.phi(),j.eta(),j.phi()) < 0.5:
+                    mup4 += mu.p4()
+            jp4 -= mup4
             self.JetCorrector.setJetEta(j.eta())
             self.JetCorrector.setJetPt(j.pt()*j.rawFactor()) # NOTE: we don't subtract the muon here!
             self.JetCorrector.setJetA(j.jetArea())
