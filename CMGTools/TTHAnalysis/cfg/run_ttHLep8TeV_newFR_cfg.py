@@ -253,7 +253,7 @@ elif test==4:
 elif test==5:
     # MC sync sample
     comp = selectedComponents[0]
-    comp.files = ['file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/v1/cmgTuple_V5_10_qcd_mu_file1.full.root']
+    comp.files = ['root://eoscms//eos/cms/store/cmst3/user/gpetrucc/SusyFakes/cmgTuple_V5_10_qcd_mu_file1.full.root']
     selectedComponents = [comp]
     comp.splitFactor = 1
     comp.triggers = [] 
@@ -262,11 +262,11 @@ elif test==6:
     # MC sync sample
     comp = selectedComponents[0]
     comp.files = [
-        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file1.root',
-        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file2.root',
-        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file3.root',
-        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file4.root',
-        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_file5.root',
+        'root://eoscms//eos/cms/store/cmst3/user/gpetrucc/SusyFakes/cmgTuple_file1.root',
+        'root://eoscms//eos/cms/store/cmst3/user/gpetrucc/SusyFakes/cmgTuple_file2.root',
+        'root://eoscms//eos/cms/store/cmst3/user/gpetrucc/SusyFakes/cmgTuple_file3.root',
+        'root://eoscms//eos/cms/store/cmst3/user/gpetrucc/SusyFakes/cmgTuple_file4.root',
+        'root://eoscms//eos/cms/store/cmst3/user/gpetrucc/SusyFakes/cmgTuple_file5.root',
     ]
     comp.files = comp.files[:1]
     comp.splitFactor = len(comp.files)
@@ -276,7 +276,7 @@ elif test==7:
     # Data sync sample
     comp = DoubleMuD
     comp.files = [
-        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_doubleMu_goodfileRunD.root',
+        'root://eoscms//eos/cms/store/cmst3/user/gpetrucc/SusyFakes/cmgTuple_doubleMu_goodfileRunD.root',
     ]
     comp.splitFactor = len(comp.files)
     selectedComponents = [comp]
@@ -287,7 +287,7 @@ elif test==8:
     # Data sync sample, processed with V5_10
     comp = DoubleMuD
     comp.files = [
-        'file:/afs/cern.ch/user/g/gpetrucc/w/SusyFakes/cmgTuple_V5_10_doubleMu_goodfileRunD.root',
+        'root://eoscms//eos/cms/store/cmst3/user/gpetrucc/SusyFakes/cmgTuple_V5_10_doubleMu_goodfileRunD.root',
     ]
     comp.splitFactor = len(comp.files)
     selectedComponents = [comp]
