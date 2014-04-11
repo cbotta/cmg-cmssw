@@ -94,6 +94,9 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
         var(tr, 'met_t1')
         var(tr, 'metPhi_t1')
 
+        if self.cfg_comp.isMC: 
+            var( tr, 'puWeight' )
+
     def beginLoop(self):
         super(ttHLepFRAnalyzer,self).beginLoop()
         self.counters.addCounter('pairs')
@@ -141,6 +144,8 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
         fill(tr, 'met_old', event.metOld.pt())
         fill(tr, 'metPhi_old', event.metOld.phi())
 
+        if self.cfg_comp.isMC:
+            fill( tr, 'puWeight', event.eventWeight )                                
 
         self.counters.counter('pairs').inc('all events')
 
@@ -157,22 +162,24 @@ class ttHLepFRAnalyzer( TreeAnalyzerNumpy ):
             pmu.SetPtEtaPhiM(met.pt(), 0., met.phi(), 0.);           
             return (pmet+pmu).M()
 
-        for lep in event.looseFRLeptons:
-             lep.mvaValue = -99.0
-             #self.leptonMVA.addMVA(lep)
-             if abs(lep.pdgId()) == 11: continue
-             fillLepton(tr, "Probe", lep)
-             fill(tr, 'mtw_probe',  mtw(lep, event.met))
-             fill(tr, 'mtw_probe_raw',  mtw(lep, event.metRaw))
-             fill(tr, 'mtw_probe_old',  mtw(lep, event.metOld))
-             fill(tr, 'mtw_probe_t1',  mtw(lep, event.metT1))
-             #fill(tr, 'mtw2_probe', mtw2(lep, event.met))
-             for jet in event.cleanFRNoIdJetsAll:
-                 fillJet(tr,"Jet",jet)
-                 dphi = deltaPhi(jet.phi(),lep.phi())
-                 fill(tr, 'dphi', dphi)
-                 break
-             tr.tree.Fill()
-             break
+        if len(event.looseFRLeptons)==1: 
+            for lep in event.looseFRLeptons:
+                lep.mvaValue = -99.0
+                #self.leptonMVA.addMVA(lep)
+                if abs(lep.pdgId()) == 11: continue
+                fillLepton(tr, "Probe", lep)
+                fill(tr, 'mtw_probe',  mtw(lep, event.met))
+                fill(tr, 'mtw_probe_raw',  mtw(lep, event.metRaw))
+                fill(tr, 'mtw_probe_old',  mtw(lep, event.metOld))
+                fill(tr, 'mtw_probe_t1',  mtw(lep, event.metT1))
+                #fill(tr, 'mtw2_probe', mtw2(lep, event.met))
+                for jet in event.cleanFRNoIdJetsAll:
+                    if deltaR(jet.eta(),jet.phi(),lep.eta(),lep.phi())> 1.:
+                        fillJet(tr,"Jet",jet)
+                        dphi = deltaPhi(jet.phi(),lep.phi())
+                        fill(tr, 'dphi', dphi)
+                        break
+                tr.tree.Fill()
+                break
          
         return True

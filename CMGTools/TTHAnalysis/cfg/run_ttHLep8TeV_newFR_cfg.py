@@ -74,6 +74,16 @@ ttHVertexAna = cfg.Analyzer(
     verbose = False
     )
 
+
+# this analyzer actually does the pile-up reweighting.
+pileUpAna = cfg.Analyzer(
+    "PileUpAnalyzer",
+    # build unweighted pu distribution using number of pile up interactions if False
+    # otherwise, use fill the distribution using number of true interactions
+    true = True,
+    makeHists=False
+    )
+
 # Gen Info Analyzer
 ttHGenAna = cfg.Analyzer(
     'ttHGenLevelAnalyzer',
@@ -119,7 +129,7 @@ ttHJetAna = cfg.Analyzer(
     #jetCol = 'cmgPFJetSelCHS',
     jetCol = 'cmgPFJetSel',
     jetCol4MVA = 'cmgPFJetSel',
-    jetPt = 25.,
+    jetPt = 40.,
     jetEta = 2.5, #4.7
     jetEtaCentral = 2.5,
     relaxJetId = False,  
@@ -184,10 +194,20 @@ JetMonABCD.splitFactor = 500
 selectedComponents=mcSamples+dataSamples1Mu+dataSamplesMu+dataSamplesE+dataSamplesMuE+[JetMonABCD]
 SingleMuD.splitFactor = 1200
 SingleMuC.splitFactor = 1200
-QCDMuPt15.splitFactor = 500
 
+QCDMuPt15.splitFactor = 1000
+TTJets.splitFactor = 1000
+WJets.splitFactor = 1000
+DYJetsM50.splitFactor = 1000
+DYJetsM10.splitFactor = 250
 
-selectedComponents = [ QCDMuPt15, WJets, DYJetsM50 ]
+#selectedComponents = [TTJets, QCDMuPt15, WJets, DYJetsM50]
+#selectedComponents = [ DYJetsM10 ]
+
+selectedComponents = [DoubleMuD]
+for comp in selectedComponents:
+    comp.json = '/afs/cern.ch/user/g/gpetrucc/scratch0/cmgprod/CMSSW_5_3_14/src/CMGTools/TTHAnalysis/data/json/sync-Run2012D-Prompt.json'
+
 
 #-------- SEQUENCE
 
@@ -196,6 +216,7 @@ sequence = cfg.Sequence([
     #eventSelector,
     jsonAna,
     triggerAna,
+    pileUpAna,
     ttHGenAna,
     ttHVertexAna,
     ttHLepAna,
@@ -215,16 +236,14 @@ sequence = cfg.Sequence([
 # #selectedComponents.remove(TTJets)
 
 test = 0
-selectedComponents = [DoubleMuD]
-for comp in selectedComponents:
-    comp.json = '/afs/cern.ch/user/g/gpetrucc/scratch0/cmgprod/CMSSW_5_3_14/src/CMGTools/TTHAnalysis/data/json/sync-Run2012D-Prompt.json'
 
 ttHJetAna.recalibrateJets = True
 if test==1:
     # test a single component, using a single thread.
     # necessary to debug the code, until it doesn't crash anymore
     comp = selectedComponents[0]
-    comp.files = comp.files[:1]
+    #comp.files = comp.files[:1]
+    comp.files = ['root://eoscms//eos/cms/store/cmst3/user/cmgtools/CMG/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM/V5_B/PAT_CMG_V5_10_0/cmgTuple_3362.root', 'root://eoscms//eos/cms/store/cmst3/user/cmgtools/CMG/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM/V5_B/PAT_CMG_V5_10_0/cmgTuple_3363.root', 'root://eoscms//eos/cms/store/cmst3/user/cmgtools/CMG/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM/V5_B/PAT_CMG_V5_10_0/cmgTuple_3364.root', 'root://eoscms//eos/cms/store/cmst3/user/cmgtools/CMG/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM/V5_B/PAT_CMG_V5_10_0/cmgTuple_3365.root', 'root://eoscms//eos/cms/store/cmst3/user/cmgtools/CMG/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM/V5_B/PAT_CMG_V5_10_0/cmgTuple_3366.root']
     selectedComponents = [comp]
     comp.splitFactor = 1
 elif test==2:    
