@@ -9,6 +9,18 @@ sys.argv.remove('-b-')
 
 from CMGTools.TTHAnalysis.plotter.mcPlots import *
 
+def H1DToH2D(h1d,h2d,func):
+    ax = h2d.GetXaxis()
+    ay = h2d.GetYaxis()
+    a1 = h1d.GetXaxis()
+    for bx in xrange(1,h2d.GetNbinsX()+1):
+       x = ax.GetBinCenter(bx) 
+       for by in xrange(1,h2d.GetNbinsY()+1):
+           y = ay.GetBinCenter(by) 
+           ib = a1.FindBin(func(x,y))
+           h2d.SetBinContent(bx, by, h1d.GetBinContent(ib))
+           h2d.SetBinError(bx, by, h1d.GetBinError(ib))
+
 class FakeRateSimple:
     def __init__(self,plotFileName, denDir, numDir, options):
         self._plotFileName = plotFileName
@@ -385,12 +397,12 @@ class FakeRateMET1D(FakeRateMET1Bin):
                         h[0].GetXaxis().SetTitleOffset(0.9)
                         ROOT.gStyle.SetErrorX(0.5)
                         #doTinyCmsPrelim(hasExpo = False, textSize = 0.035)
-                        for ext in self._options.printPlots.split(","):
-                            if ext == "txt": 
-                                dump = open("%s/FR_%s_%s_slice_%s.%s" % (self._denDir, p.name, l, xlabel, ext), "w")
-                                dump.write(text)
-                            else:
-                                c1.Print("%s/FR_%s_%s_slice_%s.%s" % (self._denDir, p.name, l, xlabel, ext))
+                        #for ext in self._options.printPlots.split(","):
+                        #    if ext == "txt": 
+                        #        dump = open("%s/FR_%s_%s_slice_%s.%s" % (self._denDir, p.name, l, xlabel, ext), "w")
+                        #        dump.write(text)
+                        #    else:
+                        #        c1.Print("%s/FR_%s_%s_slice_%s.%s" % (self._denDir, p.name, l, xlabel, ext))
                     c1 = ROOT.TCanvas("FR_"+p.name+"_stack", p.name, 600, 400)
                     sigy[0].GetYaxis().SetRangeUser(0,1.0)
                     sigy[0].GetXaxis().SetTitleOffset(0.9)
@@ -428,6 +440,24 @@ class FakeRateMET1D(FakeRateMET1Bin):
             for ext in self._options.printPlots.split(","):
                 if ext == "txt": continue
                 c1.Print("%s/FR_%s_%s_final.%s" % (self._denDir, p.name, "stack", ext))
+            if p.name == "l2d_met":
+                c1 = ROOT.TCanvas("FR_"+p.name+"_"+l, p.name, 900, 800)
+                c1.SetRightMargin(0.20)
+                h2d = self._denFile.Get("pteta2d_data").Clone("h2d_template")
+                for h1d,l in (sigx,"qcd"),(bkgx,"ewk"),(datax,"data"),(dcorrx,"dcorr"):
+                    H1DToH2D(h1d[0],h2d,ROOT.fakeRateBin_Muons)
+                    ROOT.gStyle.SetErrorX(0.5)
+                    ROOT.gStyle.SetPaintTextFormat(".3f")
+                    ROOT.gStyle.SetTextFont(62)
+                    h2d.GetZaxis().SetTitle("Fake rate");
+                    if l != "ewk": h2d.GetZaxis().SetRangeUser(0.0,0.4);
+                    else:          h2d.GetZaxis().SetRangeUser(0.8,1.0);
+                    h2d.Draw("COLZ TEXT90E")
+                    h2d.SetMarkerSize(1.5)
+                    for ext in self._options.printPlots.split(","):
+                        if ext == "txt": continue
+                        c1.Print("%s/FR_%s_%s.%s" % (self._denDir, p.name, "unrolled_"+l, ext))
+                    
 
 
 class FakeRateMCSub1D:
@@ -533,6 +563,23 @@ class FakeRateMCSub1D:
                 for ext in self._options.printPlots.split(","):
                     if ext == "txt": continue
                     c1.Print("%s/FR_%s_%s_%s.%s" % (self._denDir, p.name, "stack", self._myname, ext))
+                if p.name == "l2d":
+                    c1 = ROOT.TCanvas("FR_"+p.name+"_"+l, p.name, 900, 800)
+                    c1.SetRightMargin(0.20)
+                    h2d = self._denFile.Get("pteta2d_data").Clone("h2d_template")
+                    for h1d,l in (sig[2],"qcd"),(bkg[2],"ewk"),(data[2],"data"),(dsub[2],"dsub"):
+                        H1DToH2D(h1d,h2d,ROOT.fakeRateBin_Muons)
+                        ROOT.gStyle.SetErrorX(0.5)
+                        ROOT.gStyle.SetPaintTextFormat(".3f")
+                        ROOT.gStyle.SetTextFont(62)
+                        h2d.GetZaxis().SetTitle("Fake rate");
+                        if l != "ewk": h2d.GetZaxis().SetRangeUser(0.0,0.4);
+                        else:          h2d.GetZaxis().SetRangeUser(0.8,1.0);
+                        h2d.Draw("COLZ TEXT90E")
+                        h2d.SetMarkerSize(1.5)
+                        for ext in self._options.printPlots.split(","):
+                            if ext == "txt": continue
+                            c1.Print("%s/FR_%s_%s_%s.%s" % (self._denDir, p.name, "unrolled_"+l, self._myname, ext))
             else:
                 print "No idea how to handle a " + data[0].ClassName()
 
