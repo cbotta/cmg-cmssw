@@ -338,6 +338,10 @@ class FakeRateMET1D(FakeRateMET1Bin):
                 self.fill1DY(bkg, bkgy, ix) 
                 self.fill1DY(data,datay,ix) 
                 met_s = (  0., 20.); met_l = ( 45., 80. )
+                if self.integral(datay[1], met_s[0], met_l[1] )[0] == 0:
+                    dcorrx[0].SetBinContent(ix, 0.0)
+                    dcorrx[0].SetBinError(ix,   0.0) 
+                    continue
                 f_s   = self.frFromRange(datay, met_s[0], met_s[1])
                 f_l   = self.frFromRange(datay, met_l[0], met_l[1])
                 r_slp = self.rslp(datay,bkgy,met_s,met_l)
