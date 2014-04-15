@@ -1,4 +1,5 @@
 lpt : Probe_pt : [10,15,20,25,30,35,45,50 ] ; XTitle="Lepton p_{T} (GeV)"
+lpt20 : Probe_pt : [20,25,30,35,45,50 ] ; XTitle="Lepton p_{T} (GeV)"
 leta : abs(Probe_eta) : [ 0, 0.5, 1.0, 1.5, 2.0, 2.5 ]; XTitle="Lepton |#eta|", MoreY=1.4
 pteta2d : abs(Probe_eta)\:TMath\:\:Min(Probe_pt,49) : [10,15,20,25,30,35,45,50]*[0,0.5,1.0,1.5,2.0,2.5]; XTitle="Lepton p_{T} (GeV)", YTitle="Lepton |#eta|"
 lpt_met : met_t1\:Probe_pt : [10,15,20,25,30,35,45,50]*[0,10,15,20,25,30,40,50,60,80,100] ; XTitle="Lepton p_{T} (GeV)", YTitle="E_{T}^{miss} (GeV)"
@@ -12,4 +13,7 @@ jetpt : Jet_pt : 15,0,150; XTitle="Away jet p_{T} (GeV)"
 jetcsv : Jet_btagCSV : 5,0,1; XTitle="Away jet b-tag disc."
 liso: Probe_relIso03 : 20,0,1; XTitle="Lepton rel iso. (R03)"
 mtw : mtw_probe_t1 : 20,0,200; XTitle="M_{T}(l\, E_{T}^{miss}) (GeV)"
-mtw_log : mtw_probe_t1 : 20,0,200; XTitle="M_{T}(l\, E_{T}^{miss}) (GeV)", Logy=True
+mtw_log : mtw_probe_t1 : 20,0,200; XTitle="M_{T}(l\, E_{T}^{miss})(GeV)", Logy=True
+btagJet : Jet_btagCSV : 10,0,1.5; XTitle="Tag Jet btag"
+dPhi: abs(dphi): 12,0,3.1416; XTitle="#Delta#phi(lep-jet)",Legend='TL'
+ptBalance: Probe_pt/Jet_pt : 15,0,3; XTitle="lep_{p_{T}}/jet_{p_{T}}"

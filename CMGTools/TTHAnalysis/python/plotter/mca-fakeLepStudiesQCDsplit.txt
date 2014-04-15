@@ -1,0 +1,9 @@
+#QCD+     : QCDMuPt15 :   134680 ; FillColor=ROOT.kOrange+10
+QCDj     : QCDMuPt15 :   134680 : Probe_mcMatchAny <= 1; FillColor=ROOT.kRed
+QCDb    : QCDMuPt15 :   134680 : Probe_mcMatchAny > 1; FillColor=ROOT.kOrange
+TT 	 : TTJets    :   246.6  ; FillColor=ROOT.kGray,Label="tt"
+DY       : DYJetsM50 : 3503.7   ;  FillColor=ROOT.kCyan, Label="Z+jets"
+DY       : DYJetsM10 : 877      ;  FillColor=ROOT.kCyan, Label="Z+jets"
+WJets    : WJets      : 37509.0   ;  FillColor=ROOT.kCyan+2, Label="W+jets"
+
+#data     : DoubleMuD
