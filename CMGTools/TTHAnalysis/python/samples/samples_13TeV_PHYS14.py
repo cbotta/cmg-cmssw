@@ -362,13 +362,29 @@ T5qqqqWW = [
     T5qqqqWW_mGo1000_mCh800_mChi700_dilep, T5qqqqWW_mGo1200_mCh1000_mChi800_dilep
 ]
 
+T5qqqqWZDeg_mGo1000_mCh315_mChi300_dilep  = kreator.makeMCComponentFromEOS('T5qqqqWZDeg_mGo1000_mCh315_mChi300_dilep','/T5qqqqWZDeg_mGo1000_mCh315_mChi300_dilep/','/store/cmst3/group/susy/gpetrucc/13TeV/Phys14DR/MINIAODSIM/%s',".*root", 0.325388*(0.333)*(0.112))
+T5qqqqWZDeg_mGo1000_mCh325_mChi300_dilep  = kreator.makeMCComponentFromEOS('T5qqqqWZDeg_mGo1000_mCh325_mChi300_dilep','/T5qqqqWZDeg_mGo1000_mCh325_mChi300_dilep/','/store/cmst3/group/susy/gpetrucc/13TeV/Phys14DR/MINIAODSIM/%s',".*root", 0.325388*(0.324)*(0.108))   
+T5qqqqWZDeg = [T5qqqqWZDeg_mGo1000_mCh315_mChi300_dilep, T5qqqqWZDeg_mGo1000_mCh325_mChi300_dilep]
+
+T5qqqqWZ_mGo1200_mCh1000_mChi800_dilep    = kreator.makeMCComponentFromEOS('T5qqqqWZ_mGo1200_mCh1000_mChi800_dilep','/T5qqqqWZ_mGo1200_mCh1000_mChi800_dilep/','/store/cmst3/group/susy/gpetrucc/13TeV/Phys14DR/MINIAODSIM/%s',".*root", 0.0856418*(3*0.108)*(3*0.034))   
+T5qqqqWZ_mGo1500_mCh800_mChi100_dilep     = kreator.makeMCComponentFromEOS('T5qqqqWZ_mGo1500_mCh800_mChi100_dilep','/T5qqqqWZ_mGo1500_mCh800_mChi100_dilep/','/store/cmst3/group/susy/gpetrucc/13TeV/Phys14DR/MINIAODSIM/%s',".*root", 0.0141903*(3*0.108)*(3*0.034))
+T5qqqqWZ = [T5qqqqWZ_mGo1200_mCh1000_mChi800_dilep, T5qqqqWZ_mGo1500_mCh800_mChi100_dilep]
+
+T5qqqqZZDeg_mGo1000_mCh315_mChi300_dilep  = kreator.makeMCComponentFromEOS('T5qqqqZZDeg_mGo1000_mCh315_mChi300_dilep','/T5qqqqZZDeg_mGo1000_mCh315_mChi300_dilep/','/store/cmst3/group/susy/gpetrucc/13TeV/Phys14DR/MINIAODSIM/%s',".*root", 0.325388*(0.112)*(0.112))    
+T5qqqqZZDeg_mGo1000_mCh325_mChi300_dilep  = kreator.makeMCComponentFromEOS('T5qqqqZZDeg_mGo1000_mCh325_mChi300_dilep','/T5qqqqZZDeg_mGo1000_mCh325_mChi300_dilep/','/store/cmst3/group/susy/gpetrucc/13TeV/Phys14DR/MINIAODSIM/%s',".*root", 0.325388*(0.108)*(0.108))   
+T5qqqqZZDeg = [T5qqqqZZDeg_mGo1000_mCh315_mChi300_dilep, T5qqqqZZDeg_mGo1000_mCh325_mChi300_dilep]
+
+T5qqqqZZ_mGo1200_mCh1000_mChi800_dilep    = kreator.makeMCComponentFromEOS('T5qqqqZZ_mGo1200_mCh1000_mChi800_dilep','/T5qqqqZZ_mGo1200_mCh1000_mChi800_dilep/','/store/cmst3/group/susy/gpetrucc/13TeV/Phys14DR/MINIAODSIM/%s',".*root", 0.0856418*(3*0.034)*(3*0.034))   
+T5qqqqZZ_mGo1500_mCh800_mChi100_dilep     = kreator.makeMCComponentFromEOS('T5qqqqZZ_mGo1500_mCh800_mChi100_dilep','/T5qqqqZZ_mGo1500_mCh800_mChi100_dilep/','/store/cmst3/group/susy/gpetrucc/13TeV/Phys14DR/MINIAODSIM/%s',".*root", 0.0141903*(3*0.034)*(3*0.034))   
+T5qqqqZZ = [T5qqqqZZ_mGo1200_mCh1000_mChi800_dilep, T5qqqqZZ_mGo1500_mCh800_mChi100_dilep]
+
 
 
 # note: cross section for q~ q~ from https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections13TeVsquarkantisquark (i.e. gluinos and stops decoupled)
 T6qqWW_mSq950_mCh325_mChi300 = kreator.makeMCComponentFromEOS('T6qqWW_mSq950_mCh325_mChi300', '/SMS_T6qqWW_mSq950_mChi325_mLSP300/', '/store/cmst3/group/susy/alobanov/MC/PHYS14/PU20_25ns/%s', '.*root', 0.0898112)
 T6qqWW = [ T6qqWW_mSq950_mCh325_mChi300 ]
 
-mcSamplesPriv = T5ttttDeg + T1ttbbWW + T1ttbb + T6ttWW + SqGltttt + T1tttt_priv + T5qqqqWW + T5qqqqWWDeg + T6qqWW + GJets_fixPhoton + QCDHT_fixPhoton
+mcSamplesPriv = T5ttttDeg + T1ttbbWW + T1ttbb + T6ttWW + SqGltttt + T1tttt_priv + T5qqqqWWDeg + T5qqqqWW + T5qqqqWZDeg + T5qqqqWZ + T5qqqqZZDeg + T5qqqqZZ  + T6qqWW + GJets_fixPhoton + QCDHT_fixPhoton
 
 mcSamples = mcSamplesPHYS14_PU20bx25 + mcSamplesPHYS14_PU40bx25 + mcSamplesPHYS14_PU4bx50 + mcSamplesPriv
 
