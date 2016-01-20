@@ -24,6 +24,7 @@ class Event(object):
         self.eventWeight = eventWeight
 
     def __str__(self):
+        return '\n'
         header = '{type}: {iEv}'.format( type=self.__class__.__name__,
                                          iEv = self.iEv)
         varlines = []
