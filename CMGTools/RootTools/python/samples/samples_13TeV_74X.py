@@ -60,17 +60,70 @@ DYJetsToLL_M50_Zpt150toInf_LO =  kreator.makeMCComponent("DYJetsToLL_M50_Zpt150t
 
 VJets = [ WJetsToLNu, DYJetsToLL_M50, DYJetsToLL_M50_LO, DYJetsToLL_M50_Zpt150toInf_LO, DYJetsToLL_M10to50, DYJetsToLL_M50_PUflat1050]
 
+
 # DY HT bins:
 DYJetsToLL_M50_HT100to200 = kreator.makeMCComponent("DYJetsToLL_M50_HT100to200", "/DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root",139.4*1.27)
 DYJetsToLL_M50_HT200to400 = kreator.makeMCComponent("DYJetsToLL_M50_HT200to400", "/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root",42.75*1.27)
 DYJetsToLL_M50_HT400to600 = kreator.makeMCComponent("DYJetsToLL_M50_HT400to600", "/DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root",5.497*1.27)
 DYJetsToLL_M50_HT600toInf = kreator.makeMCComponent("DYJetsToLL_M50_HT600toInf", "/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root",2.21*1.27)
+
+# DY low mass
+DYJetsToLL_M5to50 = kreator.makeMCComponent("DYJetsToLL_M5to50", "/DYJetsToLL_M-5to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM ", "CMS", ".*root",7160*1.23)
+
+# DYToMuMu Mass bins
+DYToMuMu_M50_120 = kreator.makeMCComponent("Zmumu_50_120_powheg", "/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 1975)
+DYToMuMu_M120_200 = kreator.makeMCComponent("Zmumu_120_200_powheg", "/ZToMuMu_NNPDF30_13TeV-powheg_M_120_200/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 19.32)
+DYToMuMu_M200_400 = kreator.makeMCComponent("Zmumu_200_400_powheg", "/ZToMuMu_NNPDF30_13TeV-powheg_M_200_400/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 2.731)
+DYToMuMu_M400_800 = kreator.makeMCComponent("Zmumu_400_800_powheg", "/ZToMuMu_NNPDF30_13TeV-powheg_M_400_800/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 0.241)
+DYToMuMu_M800_1400 = kreator.makeMCComponent("Zmumu_800_1400_powheg", " /ZToMuMu_NNPDF30_13TeV-powheg_M_800_1400/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 0.01678)
+DYToMuMu_M1400_2300 = kreator.makeMCComponent("Zmumu_1400_2300_powheg", "/ZToMuMu_NNPDF30_13TeV-powheg_M_1400_2300/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 0.00139)
+DYToMuMu_M2300_3500 = kreator.makeMCComponent("Zmumu_2300_3500_powheg", "/ZToMuMu_NNPDF30_13TeV-powheg_M_2300_3500/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root", 0.00008948)
+DYToMuMu_M3500_4500 = kreator.makeMCComponent("Zmumu_3500_4500_powheg", "/ZToMuMu_NNPDF30_13TeV-powheg_M_3500_4500/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 0.000004135)
+DYToMuMu_M4500_6000 = kreator.makeMCComponent("Zmumu_4500_6000_powheg", "/ZToMuMu_NNPDF30_13TeV-powheg_M_4500_6000/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 4.56e-7)
+DYToMuMu = [
+DYToMuMu_M50_120, 
+DYToMuMu_M120_200,
+DYToMuMu_M200_400,
+DYToMuMu_M400_800,
+DYToMuMu_M800_1400,
+DYToMuMu_M1400_2300,
+DYToMuMu_M2300_3500,
+DYToMuMu_M3500_4500,
+DYToMuMu_M4500_6000,
+]
+
+# DY HT bins (more stats):
+DYJetsToLL_M50_HT100to200_ext = kreator.makeMCComponent("DYJetsToLL_M50_HT100to200", "/DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9_ext1-v1/MINIAODSIM", "CMS", ".*root",139.4*1.23)
+DYJetsToLL_M50_HT200to400_ext = kreator.makeMCComponent("DYJetsToLL_M50_HT200to400", "/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9_ext1-v1/MINIAODSIM", "CMS", ".*root",42.75*1.23)
+DYJetsToLL_M50_HT400to600_ext = kreator.makeMCComponent("DYJetsToLL_M50_HT400to600", "/DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9_ext1-v1/MINIAODSIM", "CMS", ".*root",5.497*1.23)
+DYJetsToLL_M50_HT600toInf_ext = kreator.makeMCComponent("DYJetsToLL_M50_HT600toInf", "/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9_ext1-v1/MINIAODSIM", "CMS", ".*root",2.21*1.23)
+
 DYJetsM50HT = [
 DYJetsToLL_M50_HT100to200,
 DYJetsToLL_M50_HT200to400,
 DYJetsToLL_M50_HT400to600,
 DYJetsToLL_M50_HT600toInf,
 ]
+
+# DY HT bins (more stats) 
+DYJetsM50HT_ext = [
+DYJetsToLL_M50_HT100to200_ext,
+DYJetsToLL_M50_HT200to400_ext,
+DYJetsToLL_M50_HT400to600_ext,
+DYJetsToLL_M50_HT600toInf_ext,
+]
+
+
+#DYJetsToLL_M50_HT100to200 = kreator.makeMCComponent("DYJetsToLL_M50_HT100to200", "/DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root",139.4*1.27)
+#DYJetsToLL_M50_HT200to400 = kreator.makeMCComponent("DYJetsToLL_M50_HT200to400", "/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root",42.75*1.27)
+#DYJetsToLL_M50_HT400to600 = kreator.makeMCComponent("DYJetsToLL_M50_HT400to600", "/DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root",5.497*1.27)
+#DYJetsToLL_M50_HT600toInf = kreator.makeMCComponent("DYJetsToLL_M50_HT600toInf", "/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root",2.21*1.27)
+#DYJetsM50HT = [
+#DYJetsToLL_M50_HT100to200,
+#DYJetsToLL_M50_HT200to400,
+#DYJetsToLL_M50_HT400to600,
+#DYJetsToLL_M50_HT600toInf,
+#]
 
 ### W+jets
 WJetsToLNu_HT100to200 = kreator.makeMCComponent("WJetsToLNu_HT100to200", "/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root",1347*1.23)
@@ -305,15 +358,17 @@ WJetsToLNu_50ns = kreator.makeMCComponent("WJetsToLNu_50ns","/WJetsToLNu_TuneCUE
 GJets_Pt15to6000_50ns = kreator.makeMCComponent("GJets_Pt15to6000", "/GJet_Pt-15To6000_TuneCUETP8M1-Flat_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v3/MINIAODSIM", "CMS", ".*root", 365896)
 
 # DY HT bins:
-DYJetsToLL_M50_HT100to200_50ns = kreator.makeMCComponent("DYJetsToLL_M50_HT100to200_50ns", "/DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root",194.3*1.27)
-DYJetsToLL_M50_HT200to400_50ns = kreator.makeMCComponent("DYJetsToLL_M50_HT200to400_50ns", "/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root",52.24*1.27)
-DYJetsToLL_M50_HT600toInf_50ns = kreator.makeMCComponent("DYJetsToLL_M50_HT600toInf_50ns", "/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root",2.179*1.27)
+#DYJetsToLL_M50_HT100to200_50ns = kreator.makeMCComponent("DYJetsToLL_M50_HT100to200_50ns", "/DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9_ext1-v1/MINIAODSIM", "CMS", ".*root",139.4*1.23)
+#DYJetsToLL_M50_HT200to400_50ns = kreator.makeMCComponent("DYJetsToLL_M50_HT200to400_50ns", "/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9_ext1-v1/MINIAODSIM", "CMS", ".*root",42.75*1.23)
+#DYJetsToLL_M50_HT400to600_50ns = kreator.makeMCComponent("DYJetsToLL_M50_HT400to600_50ns", "/DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9_ext1-v1/MINIAODSIM", "CMS", ".*root",5.497*1.23)
+#DYJetsToLL_M50_HT600toInf_50ns = kreator.makeMCComponent("DYJetsToLL_M50_HT600toInf_50ns", "/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9_ext1-v1/MINIAODSIM", "CMS", ".*root",2.21*1.23)
 
-DYJetsM50HT_50ns = [
-DYJetsToLL_M50_HT100to200_50ns,
-DYJetsToLL_M50_HT200to400_50ns,
-DYJetsToLL_M50_HT600toInf_50ns,
-]
+#DYJetsM50HT_50ns = [
+#DYJetsToLL_M50_HT100to200_50ns,
+#DYJetsToLL_M50_HT200to400_50ns,
+#DYJetsToLL_M50_HT400to600_50ns,
+#DYJetsToLL_M50_HT600toInf_50ns,
+#]
 
 # Single top cross sections: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SingleTopSigma
 TToLeptons_tch_50ns = kreator.makeMCComponent("TToLeptons_tch_50ns", "/ST_t-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", (136.05+80.97)*0.108*3) 
